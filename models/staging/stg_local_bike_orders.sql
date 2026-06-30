@@ -2,9 +2,9 @@ select
     order_id,
     customer_id,
     order_status,
-    CAST(order_date AS DATE)    as order_date,
-    CAST(required_date AS DATE) as required_date,
-    CAST(shipped_date AS DATE)  as shipped_date,
+    cast(order_date as date)    as order_date,
+    cast(required_date as date) as required_date,
+    cast(shipped_date as date)  as shipped_date,
     store_id,
     staff_id
 from {{ source('local_bike', 'orders') }}

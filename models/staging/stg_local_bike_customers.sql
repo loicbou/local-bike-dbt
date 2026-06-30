@@ -7,5 +7,5 @@ select
     street,
     city,
     state,
-    CAST(zip_code AS STRING) as zip_code
+    cast(zip_code as string) as zip_code
 from {{ source('local_bike', 'customers') }}

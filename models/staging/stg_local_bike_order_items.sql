@@ -6,5 +6,5 @@ select
     list_price,
     discount,
     ROUND(list_price * quantity * (1 - discount), 2) as total_amount,
-    CONCAT(CAST(order_id AS STRING), '_', CAST(item_id AS STRING)) as order_item_id
+    CONCAT(cast(order_id as string), '_', cast(item_id as string)) as order_item_id
 from {{ source('local_bike', 'order_items') }}
