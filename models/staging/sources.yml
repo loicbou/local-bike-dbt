@@ -5,3 +5,11 @@ sources:
     schema: public
     tables:
       - name: brands
+      - name: categories
+      - name : customers
+      - name : orders
+      - name : order_items
+      - name : products
+      - name : stocks
+      - name : staffs
+      - name : stores
