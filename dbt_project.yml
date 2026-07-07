@@ -16,8 +16,8 @@ models:
       +materialized: view
       +schema: stg_local_bike
     intermediate:
-      +materialized: view
+      +materialized: table
       +schema: int_local_bike
     mart:
       +materialized: table
-      +schema: mart
+      +schema: mart_local_bike

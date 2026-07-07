@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_local_bike_orders_enriched
+    description: "Orders enriched with customer, store and staff information. Includes days_to_ship and is_late flag."
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: days_to_ship
+        description: "Computed as date_diff(shipped_date, order_date, day)"
+      - name: is_late
+        description: "True if shipped_date > required_date"
+
+  - name: int_local_bike_order_items_enriched
+    description: "Order items enriched with product, brand and category information."
+    columns:
+      - name: order_item_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_local_bike_order_summary
+    description: "Order-level summary with total amount, items count and distinct products."
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: order_total_amount
+        description: "Computed as SUM(total_amount) from order_items_enriched"
+      - name: order_total_items
+        description: "Computed as SUM(quantity) from order_items_enriched"
+
+  - name: int_local_bike_stock_status
+    description: "Stock status per store and product with stock_level classification."
+    columns:
+      - name: stock_level
+        description: "Classified as out_of_stock, low_stock or in_stock"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['out_of_stock', 'low_stock', 'in_stock']
