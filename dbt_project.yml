@@ -13,13 +13,11 @@ snapshot-paths: ["snapshots"]
 models:
   local_bike:
     staging:
-      local_bike:
-        +materialized: view
-        +schema: stg_local_bike
+      +materialized: view
+      +schema: stg_local_bike
     intermediate:
-      local_bike:
-        +materialized: view
-        +schema: int_local_bike
+      +materialized: view
+      +schema: int_local_bike
     mart:
       +materialized: table
       +schema: mart
