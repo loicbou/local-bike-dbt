@@ -1,0 +1,153 @@
+version: 2
+
+models:
+  - name: stg_local_bike_brands
+    description: "Cleaned brands data from Local Bike source."
+    columns:
+      - name: brand_id
+        description: "Primary key"
+        tests:
+          - unique:
+              name: stg_brands_brand_id_unique
+          - not_null:
+              name: stg_brands_brand_id_not_null
+
+  - name: stg_local_bike_categories
+    description: "Cleaned categories data."
+    columns:
+      - name: category_id
+        description: "Primary key"
+        tests:
+          - unique:
+              name: stg_categories_category_id_unique
+          - not_null:
+              name: stg_categories_category_id_not_null
+
+  - name: stg_local_bike_customers
+    description: "Cleaned customers data. zip_code cast to STRING."
+    columns:
+      - name: customer_id
+        description: "Primary key"
+        tests:
+          - unique:
+              name: stg_customers_customer_id_unique
+          - not_null:
+              name: stg_customers_customer_id_not_null
+
+  - name: stg_local_bike_stores
+    description: "Cleaned stores data. zip_code cast to STRING."
+    columns:
+      - name: store_id
+        description: "Primary key"
+        tests:
+          - unique:
+              name: stg_stores_store_id_unique
+          - not_null:
+              name: stg_stores_store_id_not_null
+
+  - name: stg_local_bike_staffs
+    description: "Cleaned staffs data. active cast to BOOL as is_active."
+    columns:
+      - name: staff_id
+        description: "Primary key"
+        tests:
+          - unique:
+              name: stg_staffs_staff_id_unique
+          - not_null:
+              name: stg_staffs_staff_id_not_null
+      - name: store_id
+        description: "Foreign key to stg_local_bike__stores"
+        tests:
+          - relationships:
+              name: stg_staffs_store_id_fk
+              arguments:
+                to: ref('stg_local_bike__stores')
+                field: store_id
+
+  - name: stg_local_bike_products
+    description: "Cleaned products data."
+    columns:
+      - name: product_id
+        description: "Primary key"
+        tests:
+          - unique:
+              name: stg_products_product_id_unique
+          - not_null:
+              name: stg_products_product_id_not_null
+      - name: brand_id
+        description: "Foreign key to stg_local_bike__brands"
+        tests:
+          - relationships:
+              name: stg_products_brand_id_fk
+              arguments:
+                to: ref('stg_local_bike__brands')
+                field: brand_id
+      - name: category_id
+        description: "Foreign key to stg_local_bike__categories"
+        tests:
+          - relationships:
+              name: stg_products_category_id_fk
+              arguments:
+                to: ref('stg_local_bike__categories')
+                field: category_id
+
+  - name: stg_local_bike_stocks
+    description: "Cleaned stocks data. Composite primary key on store_id + product_id."
+    columns:
+      - name: stock_id
+        description: "Primary key - computed by CONCAT(store_id, '_', product_id)"
+        tests:
+          - unique:
+              name: stg_stocks_stock_id_unique
+          - not_null:
+              name: stg_stocks_stock_id_not_null
+
+  - name: stg_local_bike_orders
+    description: "Cleaned orders data. Dates cast to DATE."
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique:
+              name: stg_orders_order_id_unique
+          - not_null:
+              name: stg_orders_order_id_not_null
+      - name: customer_id
+        description: "Foreign key to stg_local_bike__customers"
+        tests:
+          - relationships:
+              name: stg_orders_customer_id_fk
+              arguments:
+                to: ref('stg_local_bike__customers')
+                field: customer_id
+      - name: store_id
+        description: "Foreign key to stg_local_bike__stores"
+        tests:
+          - relationships:
+              name: stg_orders_store_id_fk
+              arguments:
+                to: ref('stg_local_bike__stores')
+                field: store_id
+      - name: order_status
+        description: "Status of the order"
+
+  - name: stg_local_bike_order_items
+    description: "Cleaned order items. Composite primary key on order_id + item_id. total_amount computed."
+    columns:
+      - name: order_item_id
+        description: "Primary key - computed by CONCAT(order_id, '_', item_id)"
+        tests:
+          - unique:
+              name: stg_order_items_id_unique
+          - not_null:
+              name: stg_order_items_id_not_null
+      - name: order_id
+        description: "Foreign key to stg_local_bike__orders"
+        tests:
+          - relationships:
+              name: stg_order_items_order_id_fk
+              arguments:
+                to: ref('stg_local_bike__orders')
+                field: order_id
+      - name: total_amount
+        description: "Computed as list_price * quantity * (1 - discount)"

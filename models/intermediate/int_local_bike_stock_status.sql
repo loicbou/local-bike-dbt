@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 select
     s.store_id,
     s.product_id,

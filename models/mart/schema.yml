@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: mrt_local_bike_sales_by_store
+    description: "Monthly sales performance aggregated by store. Includes revenue, order count, average order value and late order rate."
+    columns:
+      - name: store_id
+        description: "Store identifier"
+        tests:
+          - not_null
+      - name: total_revenue
+        description: "SUM of order_total_amount per store per month"
+      - name: late_order_pct
+        description: "Percentage of late orders"
+
+  - name: mrt_local_bike_product_performance
+    description: "Product performance ranked by total revenue. Includes brand and category dimensions."
+    columns:
+      - name: product_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        description: "SUM of total_amount per product"
+
+  - name: mrt_local_bike_customer_overview
+    description: "Customer lifetime value and order history overview."
+    columns:
+      - name: customer_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: lifetime_value
+        description: "SUM of all order amounts for this customer"
+
+  - name: mrt_local_bike_staff_performance
+    description: "Staff performance ranked by total revenue generated."
+    columns:
+      - name: staff_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+
+  - name: mrt_local_bike_stock_alerts
+    description: "Products with low or no stock across all stores."
+    columns:
+      - name: stock_level
+        description: "Either out_of_stock or low_stock"
